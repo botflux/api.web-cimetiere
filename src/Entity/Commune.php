@@ -3,12 +3,43 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Commune
  *
  * @ORM\Table(name="commune", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
  * @ORM\Entity(repositoryClass="App\Repository\CommuneRepository")
+ * @ApiResource(
+ *  collectionOperations={"get"},
+ *  itemOperations={"get"},
+ *  attributes={
+ *      "normalization_context"={
+ *          "groups"={
+ *              "get"
+ *          }
+ *      }
+ *  }
+ * )
+ * @ApiFilter(
+ *  SearchFilter::class,
+ *  properties={
+ *      "id": "exact",
+ *      "nom": "partial",
+ *      "departement": "partial"
+ *  }
+ * )
+ * @ApiFilter(
+ *  OrderFilter::class,
+ *  properties={
+ *      "nom"="ASC",
+ *      "departement": "ASC"
+ *  }
+ * )
  */
 class Commune
 {
@@ -25,6 +56,7 @@ class Commune
      * @var string
      *
      * @ORM\Column(name="nom", type="text", length=65535, nullable=false)
+     * @Groups({"get"})
      */
     private $nom;
 
@@ -32,6 +64,7 @@ class Commune
      * @var string
      *
      * @ORM\Column(name="departement", type="string", length=4, nullable=false)
+     * @Groups({"get"})
      */
     private $departement;
 
@@ -39,6 +72,7 @@ class Commune
      * @var string
      *
      * @ORM\Column(name="adresse", type="text", length=65535, nullable=false)
+     * @Groups({"get"})
      */
     private $adresse;
 
@@ -46,6 +80,7 @@ class Commune
      * @var string
      *
      * @ORM\Column(name="telephone", type="string", length=10, nullable=false)
+     * @Groups({"get"})
      */
     private $telephone;
 
@@ -53,6 +88,7 @@ class Commune
      * @var string
      *
      * @ORM\Column(name="email", type="text", length=65535, nullable=false)
+     * @Groups({"get"})
      */
     private $email;
 
