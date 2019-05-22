@@ -50,6 +50,7 @@ class Commune implements UserInterface, \Serializable
      * @ORM\Column(name="id", type="bigint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"get"})
      */
     private $id;
 
@@ -104,6 +105,7 @@ class Commune implements UserInterface, \Serializable
      * @var bool
      *
      * @ORM\Column(name="concessions", type="boolean", nullable=false)
+     * @Groups({"user:read"})
      */
     private $concessions;
 
@@ -111,6 +113,7 @@ class Commune implements UserInterface, \Serializable
      * @var \DateTime
      *
      * @ORM\Column(name="creation", type="date", nullable=false)
+     * @Groups({"user:get"})
      */
     private $creation;
 
@@ -118,6 +121,7 @@ class Commune implements UserInterface, \Serializable
      * @var \DateTime
      *
      * @ORM\Column(name="modification", type="date", nullable=false)
+     * @Groups({"user:read"})
      */
     private $modification;
 
@@ -125,6 +129,7 @@ class Commune implements UserInterface, \Serializable
      * @var \DateTime
      *
      * @ORM\Column(name="connexion", type="datetime", nullable=false)
+     * @Groups({"user:read"})
      */
     private $connexion;
 
@@ -132,6 +137,7 @@ class Commune implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="notification", type="string", length=5, nullable=false)
+     * @Groups({"user:read"})
      */
     private $notification;
 
@@ -139,6 +145,7 @@ class Commune implements UserInterface, \Serializable
      * @var bool
      *
      * @ORM\Column(name="hidden", type="boolean", nullable=false)
+     * @Groups({"user:read"})
      */
     private $hidden;
 
@@ -146,6 +153,7 @@ class Commune implements UserInterface, \Serializable
      * @var bool
      *
      * @ORM\Column(name="interne_fleurir", type="boolean", nullable=false)
+     * @Groups({"user:read"})
      */
     private $interneFleurir;
 
@@ -153,6 +161,7 @@ class Commune implements UserInterface, \Serializable
      * @var bool
      *
      * @ORM\Column(name="interne_entretenir", type="boolean", nullable=false)
+     * @Groups({"user:read"})
      */
     private $interneEntretenir;
 
@@ -160,6 +169,7 @@ class Commune implements UserInterface, \Serializable
      * @var int
      *
      * @ORM\Column(name="hide_fin_droit", type="integer", nullable=false, options={"comment"="0 = vrai"})
+     * @Groups({"user:read"})
      */
     private $hideFinDroit = '0';
 
@@ -167,6 +177,7 @@ class Commune implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="code_postal", type="string", length=10, nullable=false)
+     * @Groups({ "get" })
      */
     private $codePostal;
 
