@@ -8,6 +8,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Commune
@@ -41,7 +42,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *  }
  * )
  */
-class Commune
+class Commune implements UserInterface, \Serializable
 {
     /**
      * @var int
@@ -366,5 +367,37 @@ class Commune
         return $this;
     }
 
+    public function getRoles () {
+        return ['ROLE_USER'];
+    }
 
+    public function getSalt () {
+        return null;
+    }
+
+    public function serialize () {
+        return serialize(array(
+            $this->id,
+            $this->nom,
+            $this->password,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    public function unserialize ($serialized) {
+        list (
+            $this->id,
+            $this->nom,
+            $this->password,
+            // see section on salt below
+            // $this->salt
+        ) = unserialize($serialized, array('allowed_classes' => false));
+    }
+
+    public function eraseCredentials () {}
+
+    public function getUsername () {
+        return $this->nom;
+    }
 }
