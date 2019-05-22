@@ -3,12 +3,26 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Concession
  *
  * @ORM\Table(name="concession", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="id_commune", columns={"id_commune"})})
  * @ORM\Entity(repositoryClass="App\Repository\ConcessionRepository")
+ * @ApiResource(
+ *  collectionOperations={"get"},
+ *  itemOperations={"get"},
+ *  attributes={
+ *      "normalization_context"={
+ *          "groups"={
+ *              "read"
+ *          }
+ *      }
+ *  }
+ * )
+ * 
  */
 class Concession
 {
@@ -18,6 +32,7 @@ class Concession
      * @ORM\Column(name="id", type="bigint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({ "read" })
      */
     private $id;
 
@@ -25,6 +40,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="numero", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $numero;
 
@@ -32,6 +48,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="emplacement", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $emplacement;
 
@@ -39,6 +56,7 @@ class Concession
      * @var \DateTime
      *
      * @ORM\Column(name="debut", type="date", nullable=false)
+     * @Groups({ "read" })
      */
     private $debut;
 
@@ -46,6 +64,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="duree", type="string", length=0, nullable=false)
+     * @Groups({ "read" })
      */
     private $duree;
 
@@ -53,6 +72,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=0, nullable=false)
+     * @Groups({ "read" })
      */
     private $type;
 
@@ -60,6 +80,7 @@ class Concession
      * @var float
      *
      * @ORM\Column(name="tarif", type="float", precision=10, scale=0, nullable=false)
+     * @Groups({ "read" })
      */
     private $tarif;
 
@@ -67,6 +88,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="juridique", type="string", length=0, nullable=false)
+     * @Groups({ "read" })
      */
     private $juridique;
 
@@ -74,6 +96,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="nom", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $nom;
 
@@ -81,6 +104,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="nom_naissance", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $nomNaissance;
 
@@ -88,6 +112,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="prenom", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $prenom;
 
@@ -95,6 +120,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="adresse", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $adresse;
 
@@ -102,6 +128,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="telephone", type="string", length=10, nullable=false)
+     * @Groups({ "read" })
      */
     private $telephone;
 
@@ -109,6 +136,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="email", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $email;
 
@@ -116,6 +144,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="commentaires", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $commentaires;
 
@@ -123,6 +152,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="concessionnaire_origine_nom", type="string", length=255, nullable=false)
+     * @Groups({ "read" })
      */
     private $concessionnaireOrigineNom;
 
@@ -130,6 +160,7 @@ class Concession
      * @var string
      *
      * @ORM\Column(name="concessionnaire_origine_prenom", type="string", length=255, nullable=false)
+     * @Groups({ "read" })
      */
     private $concessionnaireOriginePrenom;
 
@@ -137,6 +168,7 @@ class Concession
      * @var \DateTime
      *
      * @ORM\Column(name="concessionnaire_origine_acquisition", type="date", nullable=false)
+     * @Groups({ "read" })
      */
     private $concessionnaireOrigineAcquisition;
 
@@ -149,6 +181,14 @@ class Concession
      * })
      */
     private $idCommune;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Commune", inversedBy="communeConcessions")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_commune", referencedColumnName="id")
+     * })
+     */
+    private $commune;
 
     public function getId(): ?int
     {
@@ -367,6 +407,18 @@ class Concession
     public function setIdCommune(?Commune $idCommune): self
     {
         $this->idCommune = $idCommune;
+
+        return $this;
+    }
+
+    public function getCommune(): ?Commune
+    {
+        return $this->commune;
+    }
+
+    public function setCommune(?Commune $commune): self
+    {
+        $this->commune = $commune;
 
         return $this;
     }

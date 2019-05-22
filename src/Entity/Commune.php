@@ -9,6 +9,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * Commune
@@ -180,6 +183,19 @@ class Commune implements UserInterface, \Serializable
      * @Groups({ "get" })
      */
     private $codePostal;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Concession", mappedBy="commune")
+     * @Groups({ "get" })
+     * @ORM\JoinColumn(referencedColumnName="id", unique=true)
+     * @ApiSubresource
+     */
+    private $communeConcessions;
+
+    public function __construct()
+    {
+        $this->communeConcessions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -410,5 +426,36 @@ class Commune implements UserInterface, \Serializable
 
     public function getUsername () {
         return $this->nom;
+    }
+
+    /**
+     * @return Collection|Concession[]
+     */
+    public function getCommuneConcessions(): Collection
+    {
+        return $this->communeConcessions;
+    }
+
+    public function addCommuneConcession(Concession $communeConcession): self
+    {
+        if (!$this->communeConcessions->contains($communeConcession)) {
+            $this->communeConcessions[] = $communeConcession;
+            $communeConcession->setCommune($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommuneConcession(Concession $communeConcession): self
+    {
+        if ($this->communeConcessions->contains($communeConcession)) {
+            $this->communeConcessions->removeElement($communeConcession);
+            // set the owning side to null (unless already changed)
+            if ($communeConcession->getCommune() === $this) {
+                $communeConcession->setCommune(null);
+            }
+        }
+
+        return $this;
     }
 }
