@@ -185,16 +185,17 @@ class Commune implements UserInterface, \Serializable
     private $codePostal;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Concession", mappedBy="commune")
+     * @ORM\OneToMany(targetEntity="App\Entity\Emplacement", mappedBy="commune")
      * @Groups({ "get" })
      * @ORM\JoinColumn(referencedColumnName="id", unique=true)
      * @ApiSubresource
      */
-    private $communeConcessions;
+    private $emplacements;
 
     public function __construct()
     {
         $this->communeConcessions = new ArrayCollection();
+        $this->emplacements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -429,30 +430,30 @@ class Commune implements UserInterface, \Serializable
     }
 
     /**
-     * @return Collection|Concession[]
+     * @return Collection|Emplacement[]
      */
-    public function getCommuneConcessions(): Collection
+    public function getEmplacements(): Collection
     {
-        return $this->communeConcessions;
+        return $this->emplacements;
     }
 
-    public function addCommuneConcession(Concession $communeConcession): self
+    public function addEmplacement(Emplacement $emplacement): self
     {
-        if (!$this->communeConcessions->contains($communeConcession)) {
-            $this->communeConcessions[] = $communeConcession;
-            $communeConcession->setCommune($this);
+        if (!$this->emplacements->contains($emplacement)) {
+            $this->emplacements[] = $emplacement;
+            $emplacement->setCommune($this);
         }
 
         return $this;
     }
 
-    public function removeCommuneConcession(Concession $communeConcession): self
+    public function removeEmplacement(Emplacement $emplacement): self
     {
-        if ($this->communeConcessions->contains($communeConcession)) {
-            $this->communeConcessions->removeElement($communeConcession);
+        if ($this->emplacements->contains($emplacement)) {
+            $this->emplacements->removeElement($emplacement);
             // set the owning side to null (unless already changed)
-            if ($communeConcession->getCommune() === $this) {
-                $communeConcession->setCommune(null);
+            if ($emplacement->getCommune() === $this) {
+                $emplacement->setCommune(null);
             }
         }
 

@@ -172,24 +172,6 @@ class Concession
      */
     private $concessionnaireOrigineAcquisition;
 
-    /**
-     * @var \Commune
-     *
-     * @ORM\ManyToOne(targetEntity="Commune")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_commune", referencedColumnName="id")
-     * })
-     */
-    private $idCommune;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Commune", inversedBy="communeConcessions")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_commune", referencedColumnName="id")
-     * })
-     */
-    private $commune;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -410,18 +392,4 @@ class Concession
 
         return $this;
     }
-
-    public function getCommune(): ?Commune
-    {
-        return $this->commune;
-    }
-
-    public function setCommune(?Commune $commune): self
-    {
-        $this->commune = $commune;
-
-        return $this;
-    }
-
-
 }

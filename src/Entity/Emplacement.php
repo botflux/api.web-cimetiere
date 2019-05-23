@@ -3,12 +3,27 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Emplacement
  *
  * @ORM\Table(name="emplacement", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="id_commune", columns={"id_commune"})})
  * @ORM\Entity(repositoryClass="App\Repository\EmplacementRepository")
+ * 
+ * @ApiResource(
+ *  collectionOperations={"get"},
+ *  itemOperations={"get"},
+ *  attributes={
+ *      "normalization_context"={
+ *          "groups"={
+ *              "read"
+ *          }
+ *      }
+ *  }
+ * )
  */
 class Emplacement
 {
@@ -25,6 +40,7 @@ class Emplacement
      * @var string
      *
      * @ORM\Column(name="emplacement", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $emplacement;
 
@@ -32,6 +48,7 @@ class Emplacement
      * @var string
      *
      * @ORM\Column(name="coordonnees", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $coordonnees;
 
@@ -39,6 +56,7 @@ class Emplacement
      * @var bool
      *
      * @ORM\Column(name="abandon", type="boolean", nullable=false)
+     * @Groups({ "read" })
      */
     private $abandon;
 
@@ -46,6 +64,7 @@ class Emplacement
      * @var bool
      *
      * @ORM\Column(name="sans_concession", type="boolean", nullable=false)
+     * @Groups({ "read" })
      */
     private $sansConcession;
 
@@ -53,6 +72,7 @@ class Emplacement
      * @var bool
      *
      * @ORM\Column(name="en_vente", type="boolean", nullable=false)
+     * @Groups({ "read" })
      */
     private $enVente;
 
@@ -65,6 +85,15 @@ class Emplacement
      * })
      */
     private $idCommune;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Commune", inversedBy="emplacements")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_commune", referencedColumnName="id")
+     * })
+     * @Groups({ "read" })
+     */
+    private $commune;
 
     public function getId(): ?int
     {
@@ -139,6 +168,18 @@ class Emplacement
     public function setIdCommune(?Commune $idCommune): self
     {
         $this->idCommune = $idCommune;
+
+        return $this;
+    }
+
+    public function getCommune(): ?Commune
+    {
+        return $this->commune;
+    }
+
+    public function setCommune(?Commune $commune): self
+    {
+        $this->commune = $commune;
 
         return $this;
     }
