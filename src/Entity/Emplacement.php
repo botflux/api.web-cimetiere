@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -95,6 +98,21 @@ class Emplacement
      */
     private $commune;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Concession", mappedBy="emplacement")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_emplacement", referencedColumnName="id")
+     * })
+     * @ApiSubresource
+     * @Groups({ "read" })
+     */
+    private $concessions;
+
+    public function __construct()
+    {
+        $this->concessions = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -180,6 +198,37 @@ class Emplacement
     public function setCommune(?Commune $commune): self
     {
         $this->commune = $commune;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Concession[]
+     */
+    public function getConcessions(): Collection
+    {
+        return $this->concessions;
+    }
+
+    public function addConcession(Concession $concession): self
+    {
+        if (!$this->concessions->contains($concession)) {
+            $this->concessions[] = $concession;
+            $concession->setEmplacement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConcession(Concession $concession): self
+    {
+        if ($this->concessions->contains($concession)) {
+            $this->concessions->removeElement($concession);
+            // set the owning side to null (unless already changed)
+            if ($concession->getEmplacement() === $this) {
+                $concession->setEmplacement(null);
+            }
+        }
 
         return $this;
     }

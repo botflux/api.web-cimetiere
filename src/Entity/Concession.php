@@ -45,14 +45,6 @@ class Concession
     private $numero;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="emplacement", type="text", length=65535, nullable=false)
-     * @Groups({ "read" })
-     */
-    private $emplacement;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="debut", type="date", nullable=false)
@@ -171,6 +163,12 @@ class Concession
      * @Groups({ "read" })
      */
     private $concessionnaireOrigineAcquisition;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Emplacement", inversedBy="concessions")
+     * @ORM\JoinColumn(name="id", unique=true)
+     */
+    private $emplacement;
 
     public function getId(): ?int
     {
