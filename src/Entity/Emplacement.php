@@ -108,9 +108,20 @@ class Emplacement
      */
     private $concessions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Defunt", mappedBy="emplacement")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_emplacement", referencedColumnName="id")
+     * })
+     * @ApiSubresource
+     * @Groups({ "read" })
+     */
+    private $defunts;
+
     public function __construct()
     {
         $this->concessions = new ArrayCollection();
+        $this->defunts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -227,6 +238,37 @@ class Emplacement
             // set the owning side to null (unless already changed)
             if ($concession->getEmplacement() === $this) {
                 $concession->setEmplacement(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Defunt[]
+     */
+    public function getDefunts(): Collection
+    {
+        return $this->defunts;
+    }
+
+    public function addDefunt(Defunt $defunt): self
+    {
+        if (!$this->defunts->contains($defunt)) {
+            $this->defunts[] = $defunt;
+            $defunt->setEmplacement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDefunt(Defunt $defunt): self
+    {
+        if ($this->defunts->contains($defunt)) {
+            $this->defunts->removeElement($defunt);
+            // set the owning side to null (unless already changed)
+            if ($defunt->getEmplacement() === $this) {
+                $defunt->setEmplacement(null);
             }
         }
 

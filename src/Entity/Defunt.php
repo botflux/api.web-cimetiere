@@ -3,12 +3,25 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Defunt
  *
  * @ORM\Table(name="defunt", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="id_commune", columns={"id_commune"})})
  * @ORM\Entity(repositoryClass="App\Repository\DefuntRepository")
+ * @ApiResource(
+ *  collectionOperations={"get"},
+ *  itemOperations={"get"},
+ *  attributes={
+ *      "normalization_context"={
+ *          "groups"={
+ *              "read"
+ *          }
+ *      }
+ *  }
+ * )
  */
 class Defunt
 {
@@ -18,15 +31,9 @@ class Defunt
      * @ORM\Column(name="id", type="bigint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({ "read" })
      */
     private $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="emplacement", type="text", length=65535, nullable=false)
-     */
-    private $emplacement;
 
     /**
      * @var \DateTime
@@ -39,6 +46,7 @@ class Defunt
      * @var string
      *
      * @ORM\Column(name="nom", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $nom;
 
@@ -46,6 +54,7 @@ class Defunt
      * @var string
      *
      * @ORM\Column(name="nom_naissance", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $nomNaissance;
 
@@ -53,6 +62,7 @@ class Defunt
      * @var string
      *
      * @ORM\Column(name="prenom", type="text", length=65535, nullable=false)
+     * @Groups({ "read" })
      */
     private $prenom;
 
@@ -115,17 +125,23 @@ class Defunt
      */
     private $idCommune;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Emplacement", inversedBy="defunts")
+     * @ORM\JoinColumn(name="id", unique=true)
+     */
+    private $emplacement;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmplacement(): ?string
+    public function getEmplacement(): ?Emplacement
     {
         return $this->emplacement;
     }
 
-    public function setEmplacement(string $emplacement): self
+    public function setEmplacement(Emplacement $emplacement): self
     {
         $this->emplacement = $emplacement;
 
