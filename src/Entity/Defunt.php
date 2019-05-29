@@ -39,6 +39,7 @@ class Defunt
      * @var \DateTime
      *
      * @ORM\Column(name="fin_droit", type="date", nullable=false)
+     * @Groups({ "user:read" })
      */
     private $finDroit;
 
@@ -70,6 +71,7 @@ class Defunt
      * @var \DateTime
      *
      * @ORM\Column(name="date_naissance", type="date", nullable=false)
+     * @Groups({ "user:read" })
      */
     private $dateNaissance;
 
@@ -77,6 +79,7 @@ class Defunt
      * @var \DateTime
      *
      * @ORM\Column(name="date_deces", type="date", nullable=false)
+     * @Groups({ "user:read" })
      */
     private $dateDeces;
 
@@ -84,6 +87,7 @@ class Defunt
      * @var string
      *
      * @ORM\Column(name="mouvements", type="text", length=65535, nullable=false)
+     * @Groups({ "user:read" })
      */
     private $mouvements;
 
@@ -91,6 +95,7 @@ class Defunt
      * @var string
      *
      * @ORM\Column(name="dates_mouvements", type="text", length=65535, nullable=false)
+     * @Groups({ "user:read" })
      */
     private $datesMouvements;
 
@@ -98,6 +103,7 @@ class Defunt
      * @var string
      *
      * @ORM\Column(name="situation", type="text", length=65535, nullable=false)
+     * @Groups({ "user:read" })
      */
     private $situation;
 
@@ -105,6 +111,7 @@ class Defunt
      * @var string
      *
      * @ORM\Column(name="commentaire", type="text", length=65535, nullable=false)
+     * @Groups({ "user:read" })
      */
     private $commentaire;
 
@@ -112,6 +119,7 @@ class Defunt
      * @var string
      *
      * @ORM\Column(name="biographie", type="text", length=65535, nullable=false)
+     * @Groups({ "user:read" })
      */
     private $biographie;
 
